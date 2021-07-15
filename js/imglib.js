@@ -30,7 +30,11 @@ var imglib={
 	mutouding:"i",
 	
 	skyblueplayer:"i",
+	skybluelplayer:"i",
+	skybluerplayer:"i",
 	whiteplayer:"i",
+	whitelplayer:"i",
+	whiterplayer:"i",
 	
 	mao:"n",
 	xian:"n",

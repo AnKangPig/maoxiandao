@@ -46,8 +46,8 @@ window.onload=function(){//load启动
 var world = w[S.BeginWorld];
 var speed=S.PlayerSpeed;
 //定义变量
-var playery,playerx,playbegin=false,lru=false,lock=false;
-function loadworld(playery,playerx,lw) {
+var playery,playerx,playbegin=false,lru=false,lock=false,imgdire="";
+function loadworld(playery,playerx,lw,dire,lru) {
 	if (lw!=undefined) world = lw;
 	for (var y=0;y<32;y++){ 
 		for (var x=0;x<32;x++){
@@ -55,7 +55,11 @@ function loadworld(playery,playerx,lw) {
 		}
 	}
 	playerworld=world.name,window.playery=playery,window.playerx=playerx;
-	loadimg(ynxn(playery,playerx),wd()+"player");
+	if(lru){imgdire=lru;}
+	else if(dire=="u"){imgdire="";}
+	else if(dire=="l"){imgdire="l";}
+	else if(dire=="r"){imgdire="r";}
+	loadimg(ynxn(playery,playerx),wd()+imgdire+"player");
 	document.getElementById("prompt").innerHTML="你来到了\""+world.cnname+"\"";
 }
 //加载贴图函数
@@ -70,14 +74,18 @@ function loadimg(ynxn,imgurl) {
 //ynxn(y,x)已被搬到world.js
 function wd() {return world.defaultbg;}
 function wwn(direction) {return w[world[direction+"world"]];}
-function move(direction) {
+function move(direction,lru) {
 	//把人物原位置设为背景
 	loadimg(ynxn(playery,playerx),wd());
 	//人物移动，并把人物所在位置设为人物
+	if(lru){imgdire=lru;}
+	else if(direction=="u"){imgdire="";}
+	else if(direction=="l"){imgdire="l";}
+	else if(direction=="r"){imgdire="r";}
 	loadimg(ynxn(
 		((direction=="u")?--playery:((direction=="d")?++playery:playery)),
 		((direction=="l")?--playerx:((direction=="r")?++playerx:playerx))
-	),wd()+"player");
+	),wd()+imgdire+"player");
 }
 //开始游戏函数
 function play() {
@@ -101,7 +109,7 @@ function action(direction) {//逻辑混乱，写不了注释，dddd
 	if(playbegin/*判断游戏是否开始，没有开始则什么都不执行*/){
 		var dire=direction,a=["u","d","l","r","lu","ru"];
 		for (var x=0;x<a.length;x++) eval("function "+a[x]+"(){return dire==\""+a[x]+"\";}");
-		var lu=lu(),ru=ru();
+		var lu=lu(),ru=ru(),u=u();
 		if(d()){
 			if (playery==31){
 				if (wwn("d")&&wwn("d").mask[ynxn(0,playerx)]=="o"){
@@ -112,22 +120,21 @@ function action(direction) {//逻辑混乱，写不了注释，dddd
 			}
 		}else if(!lock){
 			lock=true;
-			function ulr(a,b,c,d){return u()?a:(l()?b:(r()?c:d));}
-			function ifaction(dire){
+			function ulr(a,b,c,d){return u?a:(l()?b:(r()?c:d));}
+			function ifaction(dire,lru){
 				if (ulr(playery==0,playerx==0,playerx==31,false)){
-					if (wwn(dire)&&wwn(dire).mask[ynxn((u()?31:playery),ulr(playerx,31,0))]=="o"){
-						loadworld((u()?31:playery),ulr(playerx,31,0),wwn(dire));
+					if (wwn(dire)&&wwn(dire).mask[ynxn((dire=="u"?31:playery),ulr(playerx,31,0))]=="o"){
+						loadworld((dire=="u"?31:playery),ulr(playerx,31,0),wwn(dire),dire,lru);
 					}
-				}else if(world.mask[ynxn(playery-(u()?1:0),ulr(playerx,playerx-1,playerx+1))]=="o"){
-					move(dire);
+				}else if(world.mask[ynxn(playery-(dire=="u"?1:0),ulr(playerx,playerx-1,playerx+1))]=="o"){
+					move(dire,lru);
 				}
 			}
 			if(lu||ru){
-				dire="u";
-				ifaction(dire);
+				if(lu){dire="l";}if(ru){dire="r";}u=true;
+				ifaction("u",dire);
 				setTimeout(function(){
-					if(lu){dire="l";}if(ru){dire="r";}
-					ifaction(dire);
+					u=false;ifaction(dire);
 					setTimeout(function(){down();lock=false;},speed*5);
 				},speed*5);
 			}else{
