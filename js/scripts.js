@@ -18,7 +18,6 @@ $(function(){
 	for(var i=0,a=["xiangzuotiao","tiao","xiangyoutiao","","xiangzuozou","wan","xiangyouzou","lu","u","ru","","l","play","r"];i<7;i++)
 	$("#td3").append((i==3)?"<br>":button(a[i],a[i+7]));
 	$("img").css("vertical-align","bottom");$("td").css("white-space","nowrap");
-	$("body").append("<input type=\"text\">");
 	//读取初始界面
 	for (var y=0;y<32;y++){  
 		for (var x=0;x<32;x++){
