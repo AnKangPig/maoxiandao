@@ -26,35 +26,11 @@ $(function(){
 	}
 	//电脑按键输入
 	$(document).keydown(function(event){
-		switch(event.which){
-			case 37:l();   break;
-			case 65:l();   break;
-			case 39:r();   break;
-			case 68:r();   break;
-			case 38:u();   break;
-			case 87:u();   break;
-			case 32:u();   break;
-			case 81:lu();  break;
-			case 69:ru();  break;
-			case 70:play();break;
-		}
+		var skey="switch(event.which){",a=[37,"l" ,65,"l"   ,39,"r",68,"r" ,
+						   38,"u" ,87,"u"   ,32,"u",81,"lu",
+						   69,"ru",70,"play"];
+		for(var i=0;i<20;i+=2)skey+="case "+a[i]+":action(\""+a[i+1]+"\");break;";eval(skey+="}");
 	});
-	/*window.onkeydown = function(key){
-		var currKey=0,key=key||event;
-		currKey=key.keyCode||key.which||key.charCode;
-		switch(currKey){
-			case 37:left();   break;
-			case 65:left();   break;
-			case 39:right();  break;
-			case 68:right();  break;
-			case 38:up();     break;
-			case 87:up();     break;
-			case 32:up();     break;
-			case 81:leftup(); break;
-			case 69:rightup();break;
-			case 70:play();   break;
-		}
-	};*/
 });
 //定义变量
 var world=w[S.BeginWorld],speed=S.PlayerSpeed,
