@@ -26,7 +26,7 @@ $(function(){
 	}
 	//电脑按键输入
 	$(document).keydown(function(event){
-		switch(key.which){
+		switch(event.which){
 			case 37:left();   break;
 			case 65:left();   break;
 			case 39:right();  break;
